@@ -22,8 +22,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
+        this.canvas.width = 1000;
+        this.canvas.height = 600;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);        
@@ -42,9 +42,10 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.x = x;
     this.y = y;    
-    this.speedX = 0;
+    this.speedX = 3;
     this.speedY = 0;    
     this.gravity = 0.1;
+    this.haizearenFr= 1;
     this.gravitySpeed = 0;
     this.bounce = 0.6;
     this.update = function() {
@@ -54,7 +55,7 @@ function component(width, height, color, x, y, type) {
     }
     this.newPos = function() {
         this.gravitySpeed += this.gravity;
-        this.x += this.speedX;
+        this.x = this.x + this.speedX;
         this.y += this.speedY + this.gravitySpeed;
         this.hitBottom();
     }
@@ -63,6 +64,7 @@ function component(width, height, color, x, y, type) {
         if (this.y > rockbottom) {
             this.y = rockbottom;
             this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+            this.speedX = this.speedX /2;
         }
     }
 }
@@ -75,12 +77,8 @@ function updateGameArea() {
 
 </script>
 
-<p>The bouncing property indicates how strong a component will bounce back, after hitting the ground.</p>
+<p>SE FRENA EN EL SUELO XDDDDDDD</p>
 
-<p>Set the bouncing property to a decimal number between 0 and 1.</p>
-
-<p>0 = no bouncing.</p>
-<p>1 = will bounce all the way back.</p>
 
 </body>
 </html>
