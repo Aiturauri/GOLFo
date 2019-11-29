@@ -19,7 +19,7 @@ var Suelo2;
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 80, 75);
-    Suelo1 = new component(700, 30, "black", 0, 270);
+    Suelo1 = new component(1000, 30, "black", 0, 270);
     Suelo2 = new component(400, 30, "black", 0, 150);
 
     myGameArea.start();
@@ -29,7 +29,7 @@ var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 1500;
-        this.canvas.height = 300;
+        this.canvas.height = 600;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);        
@@ -50,11 +50,11 @@ function component(width, height, color, x, y, type) {
     this.x = x;
     this.y = y;    
     this.speedX = 3;
-    this.speedY = 0;    
+    this.speedY = -1;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
     this.gravitySpeed = 0;
-    this.bounce = 0.6;  
+    this.bounce = 0.6; 
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
@@ -62,8 +62,16 @@ function component(width, height, color, x, y, type) {
     }
     this.newPos = function() {
         this.gravitySpeed += this.gravity;
-        this.x = this.x + this.speedX;
-        this.y += this.speedY + this.gravitySpeed;
+        if(this.speedX<0.01){
+            this.speedX=0
+        }else{
+            this.x = this.x + this.speedX;        
+        }
+            this.y += this.speedY + this.gravitySpeed;
+        
+
+
+
     }
     this.Rebota = function(otherobj) {
 
@@ -71,13 +79,17 @@ function component(width, height, color, x, y, type) {
            var rockbottom = myGameArea.canvas.height - this.height - (myGameArea.canvas.height - otherobj.y);
            if (this.y > rockbottom) {
                 this.y = rockbottom;
-             this.gravitySpeed = -(this.gravitySpeed * this.bounce);
-               this.speedX = this.speedX / 1.03;
+                this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+                                if(this.speedY<0.01){
+                   this.speedY=0
+                    }else{
+                          this.speedY = -(this.speedY * this.bounce);              
+                    }
+
+               this.speedX = this.speedX * 0.95;ç
+
           }
-
         }
-
-
     }
     this.ChocaCon = function(otherobj) {
     var mybottom = this.y + (this.height);
@@ -90,12 +102,19 @@ function component(width, height, color, x, y, type) {
     }
     return crash;
   }
+
+  this.fuerzas = function() {
+        document.getElementById("x").value = this.speedX;
+        document.getElementById("y").value = this.gravitySpeed;
+  }
 }
+
 
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.newPos();
     myGamePiece.update();
+    myGamePiece.fuerzas();
     Suelo1.update();
     Suelo2.update();
         if (myGamePiece.ChocaCon(Suelo1)){
@@ -104,14 +123,15 @@ function updateGameArea() {
         if (myGamePiece.ChocaCon(Suelo2)){
         myGamePiece.Rebota(Suelo2);
         }
-   //while(suelo1.x<(myGamePiece.x+myGamePiece.width)&&(suelo1.x+suelo1.width)> myGamePiece.x)
-
 }
 
 </script>
 
 <p>SE FRENA EN EL SUELO XDDDDDDD</p>
-
-
+    <a href="GAME.html">Hasi Berriro</a>
+    <form action="#">
+<label for="x">speedX: </label><input type="text" id="x">
+<label for="y">speedY: </label><input type="text" id="y">
+</form>
 </body>
 </html>
