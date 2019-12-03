@@ -15,13 +15,23 @@ canvas {
 var myGamePiece;
 var Suelo1;
 var Suelo2;
-
+var Suelo3;
+var Suelo4;
+var Suelo5;
+var Suelo6;
+var zirkulua;
+var zuloa;
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 80, 75);
-    Suelo1 = new component(1000, 30, "black", 0, 270);
-    Suelo2 = new component(400, 30, "black", 0, 150);
-
+    Suelo1 = new component(270, 1000, "green", 0, 500);
+    Suelo2 = new component(150, 1000, "green", 270, 550);
+    Suelo3 = new component(650, 1000, "green", 420, 500);
+    zirkulua= new componentcircu(800,500,150,0,2*Math.PI);
+    Suelo4 = new component(150, 1000, "green", 1070, 550);
+    Suelo5 = new component(150, 1000, "green", 1220, 500);
+    Suelo6 = new component(150, 1000, "green", 1420, 500);
+    zuloa= new component(50, 1000, "green", 1370, 520);
     myGameArea.start();
 }
 
@@ -41,7 +51,23 @@ var myGameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
+function componentcircu(x,y,radio,start,end) {
+    this.radio=radio;
+    this.x = x;
+    this.y = y;
+    this.start=start;
+    this.end=end;
+    this.update = function() {
+        ctx = myGameArea.context;
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radio, this.start,this.end);
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        ctx.stroke();
 
+    }
+}
 
 function component(width, height, color, x, y, type) {
     this.type = type;
@@ -49,7 +75,7 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.x = x;
     this.y = y;    
-    this.speedX = 3;
+    this.speedX = 3.5;
     this.speedY = -1;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
@@ -117,11 +143,32 @@ function updateGameArea() {
     myGamePiece.fuerzas();
     Suelo1.update();
     Suelo2.update();
+    Suelo3.update();
+    Suelo4.update();
+    Suelo5.update();
+    Suelo6.update();
+    zuloa.update();
+    zirkulua.update();
         if (myGamePiece.ChocaCon(Suelo1)){
         myGamePiece.Rebota(Suelo1);
         }
         if (myGamePiece.ChocaCon(Suelo2)){
         myGamePiece.Rebota(Suelo2);
+        }
+        if (myGamePiece.ChocaCon(Suelo3)){
+        myGamePiece.Rebota(Suelo3);
+        }
+        if (myGamePiece.ChocaCon(Suelo4)){
+        myGamePiece.Rebota(Suelo4);
+        }
+        if (myGamePiece.ChocaCon(Suelo5)){
+        myGamePiece.Rebota(Suelo5);
+        }
+        if (myGamePiece.ChocaCon(zuloa)){
+        myGamePiece.Rebota(zuloa);
+        }
+        if (myGamePiece.ChocaCon(Suelo6)){
+        myGamePiece.Rebota(Suelo6);
         }
 }
  var snowStorm = (function(window, document) {
