@@ -21,6 +21,7 @@ var Suelo5;
 var Suelo6;
 var zirkulua;
 var zuloa;
+var zirkulua1;
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 80, 75);
@@ -32,6 +33,7 @@ function startGame() {
     Suelo5 = new component(150, 1000, "green", 1220, 500);
     Suelo6 = new component(150, 1000, "green", 1420, 500);
     zuloa= new component(50, 1000, "green", 1370, 520);
+    zirkulua1= new componentcircu1(50,50,20,0,2*Math.PI);
     myGameArea.start();
 }
 
@@ -68,6 +70,77 @@ function componentcircu(x,y,radio,start,end) {
 
     }
 }
+
+function componentcircu1(x,y,radio,start,end) {
+        this.radio=radio;
+    this.x = x;
+    this.y = y;
+    this.start=start;
+    this.end=end;
+
+    this.speedX = 2;
+    this.speedY = 0;    
+    this.gravity = 0.1;
+    this.haizearenFr= 1;
+    this.gravitySpeed = 0;
+    this.bounce = 0.6; 
+
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radio, this.start,this.end);
+        ctx.stroke();
+    }
+    this.newPos = function() {
+        this.gravitySpeed += this.gravity;
+        if(this.speedX<0.01){
+            this.speedX=0
+        }else{
+            this.x = this.x + this.speedX;        
+        }
+            this.y += this.speedY + this.gravitySpeed;
+    }
+
+
+    this.ChocaConSuelo = function(otherobj) {
+    var mybottom = this.y + (this.radio);
+
+    var othertop = otherobj.y;
+
+    var crash = true;
+     if ((mybottom < othertop)) {
+      crash = false;
+     }
+      return crash;
+    }
+
+
+
+    this.Rebota = function(otherobj) {
+
+        if(otherobj.x<(this.x+this.radio)&&(otherobj.x+otherobj.width)> this.x-this.radio){
+           var rockbottom = myGameArea.canvas.height - this.radio - (myGameArea.canvas.height - otherobj.y);
+           if (this.y > rockbottom) 
+           {
+                this.y = rockbottom;
+                this.gravitySpeed = -(this.gravitySpeed * this.bounce);
+                if(this.speedY<0.01)
+                {
+                    this.speedY=0;
+                }
+                else
+                {
+                    this.speedY = -(this.speedY * this.bounce);              
+                }
+
+               this.speedX = this.speedX * 0.99;
+            }
+        }
+    }
+
+}
+
 
 function component(width, height, color, x, y, type) {
     this.type = type;
@@ -112,7 +185,7 @@ function component(width, height, color, x, y, type) {
                           this.speedY = -(this.speedY * this.bounce);              
                     }
 
-               this.speedX = this.speedX * 0.95;ç
+               this.speedX = this.speedX * 0.95;
 
           }
         }
@@ -149,6 +222,8 @@ function updateGameArea() {
     Suelo6.update();
     zuloa.update();
     zirkulua.update();
+    zirkulua1.newPos();
+    zirkulua1.update();
         if (myGamePiece.ChocaCon(Suelo1)){
         myGamePiece.Rebota(Suelo1);
         }
@@ -169,6 +244,28 @@ function updateGameArea() {
         }
         if (myGamePiece.ChocaCon(Suelo6)){
         myGamePiece.Rebota(Suelo6);
+        }
+
+        if (zirkulua1.ChocaConSuelo(Suelo1)){
+        zirkulua1.Rebota(Suelo1);
+        }
+        if (zirkulua1.ChocaConSuelo(Suelo2)){
+        zirkulua1.Rebota(Suelo2);
+        }
+        if (zirkulua1.ChocaConSuelo(Suelo3)){
+        zirkulua1.Rebota(Suelo3);
+        }
+        if (zirkulua1.ChocaConSuelo(Suelo4)){
+        zirkulua1.Rebota(Suelo4);
+        }
+        if (zirkulua1.ChocaConSuelo(Suelo5)){
+        zirkulua1.Rebota(Suelo5);
+        }
+        if (zirkulua1.ChocaConSuelo(zuloa)){
+        zirkulua1.Rebota(zuloa);
+        }
+        if (zirkulua1.ChocaConSuelo(Suelo6)){
+        zirkulua1.Rebota(Suelo6);
         }
 }
  var snowStorm = (function(window, document) {
