@@ -179,11 +179,11 @@ function component(width, height, color, x, y, type) {
            if (this.y > rockbottom) {
                 this.y = rockbottom;
                 this.gravitySpeed = -(this.gravitySpeed * this.bounce);
-                                if(this.speedY<0.01){
+                if(this.speedY<0.01){
                    this.speedY=0
-                    }else{
-                          this.speedY = -(this.speedY * this.bounce);              
-                    }
+                }else{
+                    this.speedY = -(this.speedY * this.bounce);              
+                }
 
                this.speedX = this.speedX * 0.95;
 
