@@ -28,9 +28,12 @@ var egumarruskadura=1;
     
 function eguraldia(){
         
-    if(prezipitazioak>1){
+    if(prezipitazioak>1 && prezipitazioak<2){
         egumarruskadura=0.9;
     }
+    if(prezipitazioak>2){
+        egumarruskadura=0.8;
+    } 
     
     
     
@@ -95,7 +98,7 @@ function componentcircu1(x,y,radio,start,end) {
     this.start=start;
     this.end=end;
 
-    this.speedX = 3;
+    this.speedX = 4;
     this.speedY = 0;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
@@ -104,9 +107,10 @@ function componentcircu1(x,y,radio,start,end) {
 
     this.update = function() {
         ctx = myGameArea.context;
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radio, this.start,this.end);
+        ctx.fill();
         ctx.stroke();
     }
     this.newPos = function() {
