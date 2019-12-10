@@ -31,12 +31,12 @@ function eguraldia(){
     if(prezipitazioak>1){
         egumarruskadura=0.9;
     }
-    document.getElementById("eguraldia").value = prezipitazioak;
+    
     
     
 }
 function startGame() {
-    myGamePiece = new component(30, 30, "red", 80, 75);
+    myGamePiece = new component(30, 30, "red", 50,50 );
     Suelo1 = new component(270, 1000, "green", 0, 500);
     Suelo2 = new component(150, 1000, "green", 270, 550);
     Suelo3 = new component(650, 1000, "green", 420, 500);
@@ -46,6 +46,7 @@ function startGame() {
     Suelo6 = new component(150, 1000, "green", 1420, 500);
     zuloa= new component(50, 1000, "green", 1370, 520);
     zirkulua1= new componentcircu1(50,50,20,0,2*Math.PI);
+    ura= new component(150,50,"blue", 270,500);
     
     myGameArea.start();
 }
@@ -65,6 +66,8 @@ var myGameArea = {
     },    
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.fillStyle='#00D3FF';
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 function componentcircu(x,y,radio,start,end) {
@@ -92,7 +95,7 @@ function componentcircu1(x,y,radio,start,end) {
     this.start=start;
     this.end=end;
 
-    this.speedX = 2;
+    this.speedX = 3;
     this.speedY = 0;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
@@ -152,6 +155,18 @@ function componentcircu1(x,y,radio,start,end) {
             }
         }
     }
+     this.ura = function(otherobj) {
+
+        if(otherobj.x<(this.x+this.radio)&&(otherobj.x+otherobj.width)> this.x-this.radio){
+           var rockbottom = myGameArea.canvas.height - this.radio - (myGameArea.canvas.height - otherobj.y);
+           if (this.y > rockbottom) {
+                
+             this.gravitySpeed = (this.gravitySpeed/1.1 );
+            this.speedX = this.speedX/ 1.05 ;
+          }
+
+        }
+    }
 
 }
 
@@ -162,8 +177,8 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.x = x;
     this.y = y;    
-    this.speedX = 3.5;
-    this.speedY = -1;    
+    this.speedX = 3;
+    this.speedY = 0;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
     this.gravitySpeed = 0;
@@ -204,6 +219,18 @@ function component(width, height, color, x, y, type) {
           }
         }
     }
+    this.ura = function(otherobj) {
+
+        if(otherobj.x<(this.x+this.width)&&(otherobj.x+otherobj.width)> this.x){
+           var rockbottom = myGameArea.canvas.height - this.height - (myGameArea.canvas.height - otherobj.y);
+           if (this.y > rockbottom) {
+                
+             this.gravitySpeed = (this.gravitySpeed / 1.1);
+               this.speedX = this.speedX/ 1.05 ;
+          }
+
+        }
+    }
     this.ChocaCon = function(otherobj) {
     var mybottom = this.y + (this.height);
 
@@ -225,6 +252,7 @@ function component(width, height, color, x, y, type) {
 
 function updateGameArea() {
     myGameArea.clear();
+    ura.update();
     myGamePiece.newPos();
     myGamePiece.update();
     myGamePiece.fuerzas();
@@ -238,6 +266,7 @@ function updateGameArea() {
     zirkulua.update();
     zirkulua1.newPos();
     zirkulua1.update();
+    
         if (myGamePiece.ChocaCon(Suelo1)){
         myGamePiece.Rebota(Suelo1);
         }
@@ -280,6 +309,12 @@ function updateGameArea() {
         }
         if (zirkulua1.ChocaConSuelo(Suelo6)){
         zirkulua1.Rebota(Suelo6);
+        }
+        if (myGamePiece.ChocaCon(ura)){
+        myGamePiece.ura(ura);
+        }
+        if (zirkulua1.ChocaConSuelo(ura)){
+        zirkulua1.ura(ura);
         }
 }
  var snowStorm = (function(window, document) {
