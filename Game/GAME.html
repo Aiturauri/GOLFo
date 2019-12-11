@@ -43,12 +43,12 @@ function startGame() {
     Suelo1 = new component(270, 1000, "green", 0, 500);
     Suelo2 = new component(150, 1000, "green", 270, 550);
     Suelo3 = new component(650, 1000, "green", 420, 500);
-    zirkulua= new componentcircu(800,500,150,0,2*Math.PI);
+    zirkulua= new componentcircu(800,550,150,0,2*Math.PI);
     Suelo4 = new component(150, 1000, "green", 1070, 550);
     Suelo5 = new component(150, 1000, "green", 1220, 500);
     Suelo6 = new component(150, 1000, "green", 1420, 500);
     zuloa= new component(50, 1000, "green", 1370, 520);
-    zirkulua1= new componentcircu1(50,50,20,0,2*Math.PI);
+    zirkulua1= new componentcircu1(0,200,20,0,2*Math.PI);
     ura= new component(150,50,"blue", 270,500);
     
     myGameArea.start();
@@ -84,7 +84,7 @@ function componentcircu(x,y,radio,start,end) {
         
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radio, this.start,this.end);
-        ctx.fillStyle = 'green';
+        ctx.fillStyle = 'yellow';
         ctx.fill();
         ctx.stroke();
 
@@ -98,7 +98,7 @@ function componentcircu1(x,y,radio,start,end) {
     this.start=start;
     this.end=end;
 
-    this.speedX = 4;
+    this.speedX = 3;
     this.speedY = 0;    
     this.gravity = 0.1;
     this.haizearenFr= 1;
@@ -122,6 +122,51 @@ function componentcircu1(x,y,radio,start,end) {
         }
             this.y += this.speedY + this.gravitySpeed;
     }
+this.ChocaConCirculo = function(otherobj) {
+
+    var distantzia=Math.sqrt(Math.pow((otherobj.y-this.y),2)+Math.pow((otherobj.x-this.x),2));
+
+
+
+     var crash = true;
+    if ((distantzia) >=(this.radio+otherobj.radio)) {
+      crash = false;
+    }  
+    return crash;
+}
+
+this.RebotaZirkulua = function(zirkulua){
+
+   this.gravitySpeed = -(this.speedX * this.bounce);
+
+    if (this.x < zirkulua.x){
+
+      this.x -= 1;
+      this.y -= 1;
+    if (this.speedX < 0){
+      this.speedX  = this.gravitySpeed   * (this.x-zirkulua.x) * 0.02;
+
+    }
+    if (this.speedX >= 0){
+      this.speedX  = this.gravitySpeed  ;
+    }
+    }
+
+
+
+    if (this.x > zirkulua.x){
+      this.x += 1;
+      this.y -= 1;
+    if (this.speedX >= 0){
+      this.speedX  = this.gravitySpeed   * (zirkulua.x-this.x) * 0.02;
+    }
+    if (this.speedX < 0){
+      this.speedX  = -(this.gravitySpeed   * (zirkulua.x-this.x) * 0.02) ;
+    }
+    }
+
+  
+  }
 
 
     this.ChocaConSuelo = function(otherobj) {
@@ -140,23 +185,31 @@ function componentcircu1(x,y,radio,start,end) {
 
     this.Rebota = function(otherobj) {
 
-        if(otherobj.x<(this.x+this.radio)&&(otherobj.x+otherobj.width)> this.x-this.radio){
+        if(otherobj.x<(this.x+this.radio)&&(otherobj.x+otherobj.width+this.radio)> this.x){
            var rockbottom = myGameArea.canvas.height - this.radio - (myGameArea.canvas.height - otherobj.y);
-           if (this.y > rockbottom) 
-           {
+           if ((this.y > rockbottom) && (this.y < (rockbottom + 5))) {
                 this.y = rockbottom;
-                this.gravitySpeed = -(this.gravitySpeed * this.bounce * egumarruskadura);
-                if(this.speedY<0.01)
-                {
-                    this.speedY=0;
-                }
-                else
-                {
-                    this.speedY = -(this.speedY * this.bounce * egumarruskadura);              
+                this.gravitySpeed = -(this.gravitySpeed * this.bounce*egumarruskadura);
+                if(this.speedY<0.01){
+                   this.speedY=0
+                }else{
+                    this.speedY = -(this.speedY * this.bounce*egumarruskadura);              
                 }
 
-               this.speedX = this.speedX * 0.99 * egumarruskadura;
+               this.speedX = this.speedX * 0.95*egumarruskadura;
+
+          }
+          else
+          {
+            if(this.x -this.radio > otherobj.x){
+            this.x= otherobj.x+otherobj.width+this.radio;
+            this.speedX  = -this.speedX * 0.95;              
+            } else{
+            this.x=otherobj.x-this.radio;
+            this.speedX  = -this.speedX * 0.95;     
             }
+
+          }
         }
     }
      this.ura = function(otherobj) {
@@ -209,16 +262,27 @@ function component(width, height, color, x, y, type) {
 
         if(otherobj.x<(this.x+this.width)&&(otherobj.x+otherobj.width)> this.x){
            var rockbottom = myGameArea.canvas.height - this.height - (myGameArea.canvas.height - otherobj.y);
-           if (this.y > rockbottom) {
+           if ((this.y > rockbottom) && (this.y < (rockbottom + 5))) {
                 this.y = rockbottom;
-                this.gravitySpeed = -(this.gravitySpeed * this.bounce* egumarruskadura);
+                this.gravitySpeed = -(this.gravitySpeed * this.bounce);
                 if(this.speedY<0.01){
                    this.speedY=0
                 }else{
-                    this.speedY = -(this.speedY * this.bounce *egumarruskadura);              
+                    this.speedY = -(this.speedY * this.bounce);              
                 }
 
-               this.speedX = this.speedX * 0.95 * egumarruskadura;
+               this.speedX = this.speedX * 0.95;
+
+          }
+          else
+          {
+            if(this.x > otherobj.x){
+            this.x= otherobj.x+otherobj.width;
+            this.speedX  = -this.speedX * 0.95;              
+            } else{
+            this.x=otherobj.x-this.width;
+            this.speedX  = -this.speedX * 0.95;     
+            }
 
           }
         }
@@ -319,6 +383,9 @@ function updateGameArea() {
         }
         if (zirkulua1.ChocaConSuelo(ura)){
         zirkulua1.ura(ura);
+        }
+        if (zirkulua1.ChocaConCirculo(zirkulua)){
+        zirkulua1.RebotaZirkulua(zirkulua);
         }
 }
  var snowStorm = (function(window, document) {
