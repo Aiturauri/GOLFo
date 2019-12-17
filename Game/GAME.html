@@ -48,7 +48,7 @@ function startGame() {
     Suelo5 = new component(150, 1000, "green", 1220, 500);
     Suelo6 = new component(150, 1000, "green", 1420, 500);
     zuloa= new component(50, 1000, "green", 1370, 520);
-    zirkulua1= new componentcircu1(0,200,20,0,2*Math.PI);
+    zirkulua1= new componentcircu1(100,200,20,0,2*Math.PI);
     ura= new component(150,50,"blue", 270,500);
     
     myGameArea.start();
@@ -141,8 +141,8 @@ this.RebotaZirkulua = function(zirkulua){
 
     if (this.x < zirkulua.x){
 
-      this.x -= 1;
-      this.y -= 1;
+      this.x -= 0.5;
+      this.y -= 0.5;
     if (this.speedX < 0){
       this.speedX  = this.gravitySpeed   * (this.x-zirkulua.x) * 0.02;
 
@@ -205,7 +205,7 @@ this.RebotaZirkulua = function(zirkulua){
             this.x= otherobj.x+otherobj.width+this.radio;
             this.speedX  = -this.speedX * 0.95;              
             } else{
-            this.x=otherobj.x-this.radio;
+            this.x-= 5;
             this.speedX  = -this.speedX * 0.95;     
             }
 
@@ -322,7 +322,7 @@ function updateGameArea() {
     myGameArea.clear();
     ura.update();
     myGamePiece.newPos();
-    myGamePiece.update();
+   // myGamePiece.update();
     myGamePiece.fuerzas();
     Suelo1.update();
     Suelo2.update();
@@ -970,7 +970,6 @@ if(prezipitazioak<1){
 
 </script>
 
-<p>SE FRENA EN EL SUELO XDDDDDDD</p>
     <a href="GAME.html">Hasi Berriro</a>
     <form action="#">
 <label for="x">speedX: </label><input type="text" id="x">
